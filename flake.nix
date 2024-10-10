@@ -14,6 +14,9 @@
       # devShell.${system} = poetry2nix.mkPoetryEnv {
       #   projectDir = ./.;
       # };
+      defaultPackage.${system} = poetry2nix.mkPoetryEnv {
+        projectDir = ./.;
+      };
     };
 }
 
