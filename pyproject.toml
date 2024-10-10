@@ -1,17 +1,14 @@
 [tool.poetry]
 name = "nixhashsync"
 version = "0.1.0"
-description = ""
-authors = ["gaby <gab@pleme.io>"]
+description = "nixhashsync"
+authors = ["luis <ldesiqueira@pinger.com>"]
 license = "MIT"
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.12"
-requests = "^2.32.3"
+python = "^3.10"
 
-[tool.poetry.scripts]
-nixhashsync = "nixhashsync.main:main"
 
 [build-system]
 requires = ["poetry-core"]
