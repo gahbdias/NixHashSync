@@ -9,13 +9,18 @@
   outputs = { self, nixpkgs, poetry2nix }:
     let
       system = "x86_64-linux"; # Modifique conforme sua arquitetura
-      # pkgs = import nixpkgs { system = "x86_64-linux"; };
+      pkgs = nixpkgs.legacyPackages.${system};
+      inherit (poetry2nix.lib.mkPoetry2Nix { inherit pkgs; }) mkPoetryApplication;
+      app = mkPoetryApplication { projectDir = ./.; };
     in
     {
-      devShell.x86_64-linux = poetry2nix.mkPoetryApplication
-        {
-          src = ./.;
-        };
+      apps.${system}.default = {
+        type = "app";
+      };
+      # devShell.x86_64-linux = poetry2nix.mkPoetryApplication
+      #   {
+      #     src = ./.;
+      #   };
       # devShell.x86_64-linux = pkgs.mkShell {
       #   buildInputs = [
       #     poetry2nix.packages.${pkgs.system}.poetry
