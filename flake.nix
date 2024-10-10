@@ -11,9 +11,9 @@
       system = "x86_64-linux"; # Modifique conforme sua arquitetura
     in
     {
-      devShell.${system} = poetry2nix.mkPoetryEnv {
-        projectDir = ./.;
-      };
+      # devShell.${system} = poetry2nix.mkPoetryEnv {
+      #   projectDir = ./.;
+      # };
     };
 }
 
