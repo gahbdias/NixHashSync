@@ -14,9 +14,9 @@
       app = mkPoetryApplication { projectDir = ./.; };
     in
     {
-      apps.${system}.default = {
-        type = "app";
-      };
+      # apps.${system}.default = {
+      #   type = "app";
+      # };
       # devShell.x86_64-linux = poetry2nix.mkPoetryApplication
       #   {
       #     src = ./.;
