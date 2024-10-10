@@ -11,6 +11,8 @@ package-mode = false
 python = "^3.12"
 requests = "^2.32.3"
 
+[tool.poetry.scripts]
+nixhashsync = "bin.nixhashsync:main"
 
 [build-system]
 requires = ["poetry-core"]
