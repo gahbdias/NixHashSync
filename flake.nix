@@ -15,15 +15,15 @@
       };
     in
     {
-      devShell.${system} = poetry2nix.mkPoetryEnv
-        {
-          python = "python3";
-          projectDir = ./.;
-          nativeBuildInputs = with pkgs;[
-            poetry
-            git
-          ];
-        };
+      # devShell.${system} = poetry2nix.mkPoetryEnv
+      #   {
+      #     python = "python3";
+      #     projectDir = ./.;
+      #     nativeBuildInputs = with pkgs;[
+      #       poetry
+      #       git
+      #     ];
+      #   };
     };
 }
 
