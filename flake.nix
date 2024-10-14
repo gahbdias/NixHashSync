@@ -13,17 +13,14 @@
       pkgs = import nixpkgs {
         inherit system overlays;
       };
+      inherit (poetry2nix.lib.mkPoetry2Nix { inherit pkgs; }) mkPoetryApplication;
+      myPythonApp = mkPoetryApplication { projectDir = ./.; };
     in
     {
-      # devShell.${system} = poetry2nix.mkPoetryEnv
-      #   {
-      #     python = "python3";
-      #     projectDir = ./.;
-      #     nativeBuildInputs = with pkgs;[
-      #       poetry
-      #       git
-      #     ];
-      #   };
+      apps.${system}.default = {
+        type = "app";
+        program = "${myPythonApp}/bin/nixhashsync";
+      };
     };
 }
 
