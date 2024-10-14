@@ -2,7 +2,7 @@
   (self: super: let 
     version = "1.8.3";
   in {
-    super-poetry = super.poetry.overrideAttrs (oldAttrs: rec {
+    poetry = super.poetry.overrideAttrs (oldAttrs: rec {
       inherit version;
 
       src = super.fetchFromGitHub {
