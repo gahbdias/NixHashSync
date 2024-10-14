@@ -23,6 +23,12 @@
       };
 
       packages.${system}.default = myPythonApp;
+      devShells.${system}.default = pkgs.mkShell {
+        buildInputs = [
+          myPythonApp # Adds the poetry-built application to the devShell
+          pkgs.direnv # Include direnv for use flake in .envrc
+        ];
+      };
     };
 }
 
