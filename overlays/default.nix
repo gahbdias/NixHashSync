@@ -7,7 +7,7 @@
         owner = "python-poetry";
         repo = "poetry";
         rev = "1.8.2"; # Use the same version here
-        sha256 = "sha256-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"; # Replace with actual sha256
+        sha256 = "d41d8cd98f00b204e9800998ecf8427e"; # Replace with actual sha256
       };
     });
   })
