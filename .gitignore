@@ -6,6 +6,7 @@ __pycache__/
 # C extensions
 *.so
 
+.direnv
 # Distribution / packaging
 .Python
 build/

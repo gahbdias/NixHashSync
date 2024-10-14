@@ -27,6 +27,7 @@
         buildInputs = [
           myPythonApp # Adds the poetry-built application to the devShell
           pkgs.direnv # Include direnv for use flake in .envrc
+          pkgs.super-poetry
         ];
       };
     };
