@@ -8,7 +8,7 @@
 
   outputs = { self, nixpkgs, poetry2nix }:
     let
-      system = "x86_64-linux";
+      system = "x86_64-darwin";
       overlays = import ./overlays;
       pkgs = import nixpkgs {
         inherit system overlays;
