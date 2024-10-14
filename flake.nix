@@ -18,13 +18,12 @@
         myPythonApp = mkPoetryApplication { projectDir = ./.; };
       in
       {
-        apps.${system}.default = {
+        apps.default = {
           type = "app";
           program = "${myPythonApp}/bin/nixhashsync";
         };
-
-        packages.${system}.default = myPythonApp;
-        devShells.${system}.default = pkgs.mkShell {
+        packages.default = myPythonApp;
+        devShells.default = pkgs.mkShell {
           buildInputs = [
             myPythonApp
             pkgs.direnv
