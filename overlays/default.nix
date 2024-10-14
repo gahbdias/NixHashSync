@@ -10,7 +10,7 @@
         owner = "python-poetry";
         repo = "poetry";
         rev = "1.8.2";
-        sha256 = "1f2sq6xlivxk6j1ih8j5vw8xqkzs8hpl9c6s749q1q63lkrlx3mn";
+        sha256 = "058vyrby3q4632rgwfyix7fw0wjy51rqh7nmg3g9q7nl5xwra59h";
       };
     });
   })
