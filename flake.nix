@@ -21,6 +21,8 @@
         type = "app";
         program = "${myPythonApp}/bin/nixhashsync";
       };
+
+      packages.${system}.default = myPythonApp;
     };
 }
 
