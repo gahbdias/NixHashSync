@@ -1,13 +1,16 @@
 [
-  (self: super: {
+  (self: super: let 
+    version = "1.8.2";
+  in {
     poetry = super.poetry.overrideAttrs (oldAttrs: rec {
-      version = "1.8.2"; # Define version directly here
+      inherit version;
 
       src = super.fetchFromGitHub {
+        inherit version;
         owner = "python-poetry";
         repo = "poetry";
-        rev = "1.8.2"; # Use the same version here
-        sha256 = "d41d8cd98f00b204e9800998ecf8427e"; # Replace with actual sha256
+        rev = "1.8.2";
+        sha256 = "1af9af53de544df0a8c8546dc0eb9f9a3330840c";
       };
     });
   })
