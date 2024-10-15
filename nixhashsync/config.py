@@ -1,11 +1,14 @@
 import yaml
 import os
 from pydantic import BaseModel, ValidationError, Field
-from typing import List
-from deepmerge import Merger
+from typing import List, Optional
 
 
 # Definição do formato esperado para o arquivo YAML usando Pydantic
+class PluginConfig(BaseModel):
+    path: str  # Novo campo para o caminho dos arquivos de plugins
+
+
 class Plugin(BaseModel):
     author: str
     name: str
@@ -13,7 +16,8 @@ class Plugin(BaseModel):
 
 
 class ConfigModel(BaseModel):
-    plugins: List[Plugin]
+    plugin: PluginConfig  # Configurações gerais do plugin, incluindo o caminho
+    plugins: Optional[List[Plugin]] = Field(default_factory=list)
 
 
 class Config:
@@ -21,12 +25,9 @@ class Config:
     CONFIG_LOCATIONS = [
         "/etc/nixhashsync/config.yml",
         os.path.expanduser("~/.config/nixhashsync/config.yml"),
-        ".config/nixhashsync/config.yml",
+        os.path.join(os.path.dirname(__file__),
+                     ".config/nixhashsync/config.yml"),
     ]
-
-    # Definir como mesclar dicionários (configurações)
-    merger = Merger([(list, ["append"]), (dict, ["merge"])],
-                    ["override"], ["override"])
 
     def __new__(cls, *args, **kwargs):
         if cls._instance is None:
@@ -36,21 +37,23 @@ class Config:
 
     def _load_config(self):
         merged_config = {}
+        found_file = False  # Flag para verificar se algum arquivo foi encontrado
 
-        found_files = 0
+        # Verificar se algum dos arquivos de configuração existe
         for config_file in self.CONFIG_LOCATIONS:
             if os.path.exists(config_file):
-                found_files += 1
-        if found_files == 0:
-            raise ValidationError("could not find a configuration in any path")
-
-        for config_file in self.CONFIG_LOCATIONS:
-            if os.path.exists(config_file):
+                found_file = True  # Encontrou ao menos um arquivo
                 with open(config_file, "r") as file:
                     config_data = yaml.safe_load(file)
                     # Mescla o arquivo de configuração na estrutura principal
                     if config_data:
-                        self.merger.merge(merged_config, config_data)
+                        merged_config.update(config_data)
+
+        # Se nenhum arquivo de configuração foi encontrado, lança um erro
+        if not found_file:
+            raise FileNotFoundError(
+                "Não foi possível encontrar arquivo de configuração"
+            )
 
         # Validação usando Pydantic
         try:
@@ -58,6 +61,9 @@ class Config:
         except ValidationError as e:
             print(f"Erro de validação no arquivo de configuração: {e}")
             raise
+
+    def get_plugin_path(self):
+        return self.config.plugin.path
 
     def get_plugins(self):
         return self.config.plugins
@@ -67,6 +73,9 @@ class Config:
 if __name__ == "__main__":
     try:
         config = Config()
+        plugin_path = config.get_plugin_path()
+        print(f"Plugin path: {plugin_path}")
+
         plugins = config.get_plugins()
         for plugin in plugins:
             print(

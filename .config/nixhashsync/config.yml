@@ -1,3 +1,6 @@
+plugin:
+  path: "~/nix-node-plo/modules/home-manager/blackmatter/nvim/plugins/"
+
 plugins:
   - author: EtiamNullam
     name: relative-source.nvim
