@@ -40,7 +40,6 @@ class Config:
         return self.config.plugins
 
 
-# Exemplo de uso:
 if __name__ == "__main__":
     try:
         config = Config()
