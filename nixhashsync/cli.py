@@ -24,9 +24,10 @@ def get_latest_commit_hash(owner: str, repo: str) -> str:
 
 
 def main():
-    print("we are the best!")
+    print("we are the worst!")
     owner = "nixos"  # Exemplo de dono do repositório
     repo = "nixpkgs"  # Exemplo de repositório
+    print("trying stuff")
     try:
         latest_hash = get_latest_commit_hash(owner, repo)
         print(f"Último hash do repositório {owner}/{repo}: {latest_hash}")
