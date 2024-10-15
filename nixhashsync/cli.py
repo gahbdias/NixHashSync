@@ -27,42 +27,61 @@ def update_rev_file(rev_path: str, new_hash: str):
         rev_file.write(new_hash)
 
 
+# Função para extrair o autor e nome do plugin de um arquivo default.nix
+def extract_author_and_name(nix_content: str):
+    # Tentativa 1: Padrão com author e name em variáveis separadas
+    author_match = re.search(r'author = "(.*?)";', nix_content)
+    name_match = re.search(r'name = "(.*?)";', nix_content)
+
+    if author_match and name_match:
+        return author_match.group(1), name_match.group(1)
+
+    # Tentativa 2: Padrão com author e name inline
+    inline_match = re.search(
+        r"config\.blackmatter\.programs\.nvim\.plugins\.(.*?)\.(.*?)\.enable",
+        nix_content,
+    )
+    if inline_match:
+        return inline_match.group(1), inline_match.group(2)
+
+    # Se nenhum padrão for encontrado
+    raise ValueError("Formato desconhecido em default.nix")
+
+
 # Função para processar todos os plugins
 def process_plugins(base_path: str):
     print("processing plugins")
     for root, dirs, files in os.walk(base_path):
-        print("in the looop")
+        print("on loop")
         if "default.nix" in files:
             default_nix_path = os.path.join(root, "default.nix")
             rev_file_path = os.path.join(root, "rev.nix")
 
-            # Extrair 'author' e 'name' de default.nix
-            print("opening files")
+            # Ler o conteúdo de default.nix
             with open(default_nix_path, "r") as nix_file:
                 nix_content = nix_file.read()
-                author = re.search(r'author = "(.*?)";', nix_content).group(1)
-                name = re.search(r'name = "(.*?)";', nix_content).group(1)
 
-                # Obter o hash do último commit
+                # Extrair 'author' e 'name' usando os diferentes formatos
                 try:
-                    print("getting a hash")
+                    author, name = extract_author_and_name(nix_content)
+
+                    # Obter o hash do último commit
+                    print("getting hash")
                     latest_hash = get_latest_commit_hash(author, name)
-                    print("got a hash")
                     print(f"Último hash de {author}/{name}: {latest_hash}")
 
                     # Atualizar o arquivo .rev
                     update_rev_file(rev_file_path, latest_hash)
                 except Exception as e:
-                    print(f"Erro ao processar {author}/{name}: {e}")
-    print("getting the hell out")
+                    print(f"Erro ao processar {default_nix_path}: {e}")
 
 
 # Caminho base para os plugins
 plugins_base_path = os.path.expanduser(
-    "~/nix-node-plo/modules/home-manager/blackmatter/nvim/plugins/"
+    "~/nix-node-plo/modules/home-manager/blackmatter/nvim/plugins/EtiamNullam/relative-source.nvim"
 )
 
 
 def main():
-    print("NixHashSync 15/10")
+    print("NixHashSync sem config")
     process_plugins(plugins_base_path)

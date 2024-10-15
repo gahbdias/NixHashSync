@@ -1,0 +1,10 @@
+plugins:
+  - author: EtiamNullam
+    name: relative-source.nvim
+    branch: main
+  - author: JoosepAlviste
+    name: nvim-ts-context-commentstring
+    branch: main
+  - author: nvim-treesitter
+    name: nvim-treesitter-context
+    branch: master
