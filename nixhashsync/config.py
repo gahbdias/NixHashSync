@@ -25,10 +25,7 @@ class Config:
     CONFIG_LOCATIONS = [
         "/etc/nixhashsync/config.yml",
         os.path.expanduser("~/.config/nixhashsync/config.yml"),
-        ".config/nixhashsync/config.yml",
-        # os.path.join(
-        #     os.path.dirname(os.path.dirname(__file__)), ".config/config.yml"
-        # ),  # Caminho relativo à pasta NixHashSync
+        ".config/nixhashsync/config.yml",  # Caminho relativo na raiz do projeto
     ]
 
     def __new__(cls, *args, **kwargs):
@@ -67,7 +64,8 @@ class Config:
             print(f"Erro de validação no arquivo de configuração: {e}")
             raise
 
-    def get_plugin_path(self):
+    # Função para obter o caminho base dos plugins
+    def get_file_path(self):
         return self.config.plugin.path
 
     def get_plugins(self):
@@ -78,8 +76,8 @@ class Config:
 if __name__ == "__main__":
     try:
         config = Config()
-        plugin_path = config.get_plugin_path()
-        print(f"Plugin path: {plugin_path}")
+        file_path = config.get_file_path()
+        print(f"Plugin path: {file_path}")
 
         plugins = config.get_plugins()
         for plugin in plugins:
