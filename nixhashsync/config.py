@@ -20,7 +20,6 @@ class Config:
         return self.config.get("plugins", [])
 
 
-# Exemplo de uso:
 if __name__ == "__main__":
     config = Config()
     plugins = config.get_plugins()
