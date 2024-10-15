@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import os
 import requests
+
 # Importa o Singleton Config para obter plugins
 from nixhashsync.config import Config
 
@@ -58,5 +59,5 @@ def process_plugins():
 
 
 def main():
-    print("NixHashSync 1 da tarde")
+    print("NixHashSync Pydantic")
     process_plugins()
