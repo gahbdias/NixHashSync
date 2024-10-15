@@ -23,10 +23,11 @@ def get_latest_commit_hash(author: str, name: str) -> str:
         )
 
 
-# Função para atualizar o arquivo .rev com o hash do commit
+# Função para atualizar o arquivo .rev com o hash do commit, agora adicionando aspas
 def update_rev_file(rev_file: str, new_hash: str):
     with open(os.path.expanduser(rev_file), "w") as rev_file_handle:
-        rev_file_handle.write(new_hash)
+        # Adiciona aspas ao hash do commit
+        rev_file_handle.write(f'"{new_hash}"')
 
 
 # Função para processar plugins do arquivo YAML
@@ -50,12 +51,12 @@ def process_plugins():
             latest_hash = get_latest_commit_hash(author, name)
             print(f"Último hash de {author}/{name}: {latest_hash}")
 
-            # Atualizar o arquivo .rev
+            # Atualizar o arquivo .rev com aspas no hash
             update_rev_file(rev_file_path, latest_hash)
         except Exception as e:
             print(f"Erro ao processar {author}/{name}: {e}")
 
 
 def main():
-    print("NixHashSync plugin path")
+    print("NixHashSync with quotes")
     process_plugins()
