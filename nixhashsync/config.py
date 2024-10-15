@@ -6,7 +6,7 @@ from typing import List, Optional
 
 # Definição do formato esperado para o arquivo YAML usando Pydantic
 class PluginConfig(BaseModel):
-    path: str  # Novo campo para o caminho dos arquivos de plugins
+    path: str  # Caminho dos plugins
 
 
 class Plugin(BaseModel):
@@ -25,8 +25,10 @@ class Config:
     CONFIG_LOCATIONS = [
         "/etc/nixhashsync/config.yml",
         os.path.expanduser("~/.config/nixhashsync/config.yml"),
-        os.path.join(os.path.dirname(__file__),
-                     ".config/nixhashsync/config.yml"),
+        ".config/nixhashsync/config.yml",
+        # os.path.join(
+        #     os.path.dirname(os.path.dirname(__file__)), ".config/config.yml"
+        # ),  # Caminho relativo à pasta NixHashSync
     ]
 
     def __new__(cls, *args, **kwargs):
@@ -41,6 +43,9 @@ class Config:
 
         # Verificar se algum dos arquivos de configuração existe
         for config_file in self.CONFIG_LOCATIONS:
+            print(
+                f"Tentando carregar: {config_file}"
+            )  # Depuração para verificar os caminhos
             if os.path.exists(config_file):
                 found_file = True  # Encontrou ao menos um arquivo
                 with open(config_file, "r") as file:
