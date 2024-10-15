@@ -57,5 +57,5 @@ def process_plugins():
 
 
 def main():
-    print("NixHashSync Pydantic 2")
+    print("NixHashSync Merge Configs")
     process_plugins()

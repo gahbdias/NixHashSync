@@ -2,6 +2,7 @@ import yaml
 import os
 from pydantic import BaseModel, ValidationError, Field
 from typing import List
+from deepmerge import Merger
 
 
 # Definição do formato esperado para o arquivo YAML usando Pydantic
@@ -17,6 +18,16 @@ class ConfigModel(BaseModel):
 
 class Config:
     _instance = None
+    CONFIG_LOCATIONS = [
+        "/etc/nixhashsync/config.yml",
+        os.path.expanduser("~/.config/nixhashsync/config.yml"),
+        os.path.join(os.path.dirname(__file__),
+                     ".config/nixhashsync/config.yml"),
+    ]
+
+    # Definir como mesclar dicionários (configurações)
+    merger = Merger([(list, ["append"]), (dict, ["merge"])],
+                    ["override"], ["override"])
 
     def __new__(cls, *args, **kwargs):
         if cls._instance is None:
@@ -25,13 +36,19 @@ class Config:
         return cls._instance
 
     def _load_config(self):
-        config_file = os.path.join(os.path.dirname(__file__), "config.yaml")
-        with open(config_file, "r") as file:
-            config_data = yaml.safe_load(file)
+        merged_config = {}
+
+        for config_file in self.CONFIG_LOCATIONS:
+            if os.path.exists(config_file):
+                with open(config_file, "r") as file:
+                    config_data = yaml.safe_load(file)
+                    # Mescla o arquivo de configuração na estrutura principal
+                    if config_data:
+                        self.merger.merge(merged_config, config_data)
 
         # Validação usando Pydantic
         try:
-            self.config = ConfigModel(**config_data)
+            self.config = ConfigModel(**merged_config)
         except ValidationError as e:
             print(f"Erro de validação no arquivo de configuração: {e}")
             raise
@@ -40,6 +57,7 @@ class Config:
         return self.config.plugins
 
 
+# Exemplo de uso:
 if __name__ == "__main__":
     try:
         config = Config()
