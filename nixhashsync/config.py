@@ -21,8 +21,7 @@ class Config:
     CONFIG_LOCATIONS = [
         "/etc/nixhashsync/config.yml",
         os.path.expanduser("~/.config/nixhashsync/config.yml"),
-        os.path.join(os.path.dirname(__file__),
-                     ".config/nixhashsync/config.yml"),
+        ".config/nixhashsync/config.yml",
     ]
 
     # Definir como mesclar dicionários (configurações)
