@@ -38,6 +38,13 @@ class Config:
     def _load_config(self):
         merged_config = {}
 
+        found_files = 0
+        for config_file in self.CONFIG_LOCATIONS:
+            if os.path.exists(config_file):
+                found_files += 1
+        if found_files == 0:
+            raise ValidationError("could not find a configuration in any path")
+
         for config_file in self.CONFIG_LOCATIONS:
             if os.path.exists(config_file):
                 with open(config_file, "r") as file:
