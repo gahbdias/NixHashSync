@@ -35,11 +35,9 @@ def process_plugins():
     plugins = config.get_plugins()
 
     for plugin in plugins:
-        author = plugin["author"]
-        name = plugin["name"]
-        branch = plugin.get(
-            "branch", "main"
-        )  # Padrão 'main' se o branch não estiver no YAML
+        author = plugin.author  # Acesso direto como atributo
+        name = plugin.name
+        branch = plugin.branch  # Pega o branch do plugin
 
         print(f"Processando {author}/{name} (branch: {branch})")
 
@@ -59,5 +57,5 @@ def process_plugins():
 
 
 def main():
-    print("NixHashSync Pydantic")
+    print("NixHashSync Pydantic 2")
     process_plugins()
