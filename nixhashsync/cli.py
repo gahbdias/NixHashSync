@@ -74,5 +74,5 @@ def process_plugins():
 
 
 def main():
-    print("NixHashSync with quotes")
+    print("NixHashSync | Waiting when request returns error")
     process_plugins()
