@@ -12,20 +12,33 @@ def get_latest_commit_hash(author: str, name: str) -> str:
     url = f"https://api.github.com/repos/{author}/{name}/commits"
     headers = {"Accept": "application/vnd.github.v3+json"}
 
-    try:
-        response = requests.get(url, headers=headers)
-        response.raise_for_status()
-
+    response = requests.get(url, headers=headers)
+    if response.status_code in [200]:
         commits = response.json()
         return commits[0]["sha"] if commits else None
-    except requests.exceptions.RequestException as e:
-        raise Exception(f"Error accessing {author}/{name}: {e}")
+    elif response.status_code in [403, 402, 404]:
+        raise requests.exceptions.RequestException(
+            f"Error accessing {author}/{name}: HTTP {response.status_code}"
+        )
+    else:
+        response.raise_for_status()
 
 
 # Function to update the .rev file with the commit hash, now adding quotes
 def update_rev_file(rev_file: str, new_hash: str):
     with open(os.path.expanduser(rev_file), "w") as rev_file_handle:
         rev_file_handle.write(f'"{new_hash}"')
+
+
+# Function to show countdown timer
+def countdown_timer(seconds):
+    while seconds:
+        mins, secs = divmod(seconds, 60)
+        timeformat = f"{mins:02d}:{secs:02d}"
+        print(f"Retrying in: {timeformat}", end="\r")
+        time.sleep(1)
+        seconds -= 1
+    print("Retrying now...            ")
 
 
 # Function to process plugins from the YAML configuration file
@@ -51,11 +64,13 @@ def process_plugins():
 
             # Update the .rev file with the quoted commit hash
             update_rev_file(rev_file_path, latest_hash)
-        except Exception as e:
+        except requests.exceptions.RequestException as e:
             print(f"Error processing {author}/{name}: {e}")
             print("Waiting 60 seconds before retrying...")
-            time.sleep(60)
-            process_plugins()  # Retry after 60 seconds
+            countdown_timer(60)  # Show countdown before retrying
+            process_plugins()  # Retry after the countdown
+        except Exception as e:
+            print(f"An unexpected error occurred: {e}")  # Catch non-API errors
 
 
 def main():
